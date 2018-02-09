@@ -17,9 +17,9 @@ commands from now on are given by typing in an answer and pressing the
 
 ## Playing The Game
 
-'''
+```
 ./hangman
-'''
+```
 
 ### Single Player
 
