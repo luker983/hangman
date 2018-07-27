@@ -1,7 +1,7 @@
 /**
  * @file hangman.c
  * @brief a hangman game for 1-2 players
- * @detail uses memory allocation to allow the computer to choose a random word,
+ * @detail uses doubling memory allocation to allow the computer to choose a random word,
  * 2 players can take turns inputting words and number of tries to beat each other
  *
  * @author Luke Rindels
@@ -31,6 +31,8 @@ int main()
         struct diction_t *dictionary = file_open();
  
         printf("\n--**--Welcome to Hangman!--**--\n\n");
+
+// game loop
   LOOP: while(1) {
                 puts("");
                 printf("Are you playing by yourself? (enter 'q' to quit) [y/n]: ");
@@ -40,11 +42,13 @@ int main()
                 m = tolower(m);
 
                 puts("");
-
+			
+		// if playing alone, computer picks word
                 switch(m) {
                 case('y'):
                         printf("We can play together! I'll pick a word.\n");
                         word = get_word(dictionary);
+			// TODO: make a difficulty option that adjusts the number of guesses
                         guesses = strlen(word) + 3;
                         printf("For the word I picked, you get %d guesses.\n", guesses);
 
@@ -63,6 +67,7 @@ int main()
                                 printf("\nThat wasn't one of the options...so the guesser will get the default, %d tries.\n", DEF);
                         }
                         printf("\nOne of you should enter a word here: ");
+			// TODO: Add option for the player choosing the word to get a random word   
                         word = getpass(prompt);
                         //fgets(buf, LEN, stdin);
 
@@ -103,6 +108,12 @@ int main()
         return 0;
 }
 
+/**
+ * Displays the game board to stdout
+ *
+ * @param word the word being guessed
+ * @param guesses the number of tries the player gets
+ */
 void make_hangman(char *word, int guesses)
 {
         int len = strlen(word);
@@ -175,6 +186,12 @@ void make_hangman(char *word, int guesses)
         printf("You have no more guesses left. You lose!\n");
 }
 
+/**
+ * Strips whitespace from the right of a string
+ *
+ * @param s the string being stripped
+ * @return the stripped string
+ */
 char *rstrip(char *s){
         int i;
 
@@ -187,6 +204,11 @@ char *rstrip(char *s){
         return s;
 }
 
+/**
+ * Opens and allocates space for the dictionary
+ * 
+ * @return the dictionary
+ */
 struct diction_t *file_open()
 {
         int i = 0;
@@ -222,6 +244,11 @@ struct diction_t *file_open()
         return dictionary;
 }
 
+/**
+ * Frees the memory allocated for the dictionary
+ *
+ * @param dictionary the dictionary being freed
+ */
 void free_mem(struct diction_t *dictionary)
 {
         int i;
@@ -233,6 +260,12 @@ void free_mem(struct diction_t *dictionary)
                         free(dictionary);
 }
 
+/**
+ * Pulls random word from dictionary
+ *
+ * @param dictionary the dictionary being pulled from
+ * @return a random word
+ */
 char *get_word(struct diction_t *dictionary)
 {
         int r = random() % dictionary->nval;
