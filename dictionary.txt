@@ -96,6 +96,9 @@ abbesses
 abbey
 abbeys
 abbot
+angman
+all: $(targets)
+
 abbotcies
 abbotcy
 abbots
@@ -83969,6 +83972,7 @@ kobold
 kobolds
 kobos
 kobs
+kodyjody
 koel
 koels
 kohl
