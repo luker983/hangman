@@ -59,25 +59,23 @@ int main()
                 case('n'):
                         printf("Cool, the person choosing the word should enter it here:\n");
                         puts("");
-                        printf("How many chances should the guesser get? [1-1024]: ");
+
+            			// TODO: Add option for the player choosing the word to get a random word   
+                        word = getpass(prompt); 
+                        word = rstrip(word);
+                        system("clear");
+                            
+                        printf("\n How many chances should the guesser get? [1-1024]: \n");
                         fgets(buf, LEN, stdin);
                         sscanf(buf, "%d", &guesses);
-
+        
+                        system("clear");
                         if (guesses > 0 && guesses < LEN) {
                                 printf("\nThe guesser will get %d tries.\n", guesses);
                         } else {
                                 printf("\nThat wasn't one of the options...so the guesser will get the default, %d tries.\n", DEF);
                         }
-                        printf("\nOne of you should enter a word here: ");
-			// TODO: Add option for the player choosing the word to get a random word   
-                        word = getpass(prompt);
-                        //fgets(buf, LEN, stdin);
-
-                        //word = buf;
-                        word = rstrip(word);
-
                         make_hangman(word, guesses);
-                       
                         break;
                 case('q'):
                         free_mem(dictionary);
@@ -92,18 +90,19 @@ int main()
                 fgets(buf, LEN, stdin);
                 sscanf(buf, "%c", &m);
 
+                system("clear");
                 m = tolower(m);
 
                 switch(m) {
                 case('y'):
-                        printf("\nOf course you do!\n");
+                        printf("\nAlright! Let's play again.\n");
                         break;
                 case('n'):
                         free_mem(dictionary);
-                        printf("\nI didn't want to play again anyway.\n");
+                        printf("\nThat's fine, come back soon!\n");
                         return 0;
                 default:
-                        printf("\nUmmm....that wasn't one of the options, so I'm going to assume you want to play again.\n");
+                        printf("\nThat wasn't one of the options so I'm going to assume you want to play again.\n");
                 }
         }
 
