@@ -29,8 +29,9 @@ int main()
         int guesses;
         srandom(time(NULL));
         struct diction_t *dictionary = file_open();
- 
-        printf("\n--**--Welcome to Hangman!--**--\n\n");
+    
+        system("clear");
+        printf("\n---------- Welcome to Hangman! ----------\n\n");
 
 // game loop
   LOOP: while(1) {
@@ -39,6 +40,7 @@ int main()
                 fgets(buf, LEN, stdin);
                 sscanf(buf, "%c", &m);
 
+                system("clear");
                 m = tolower(m);
 
                 puts("");
@@ -46,7 +48,7 @@ int main()
 		// if playing alone, computer picks word
                 switch(m) {
                 case('y'):
-                        printf("We can play together! I'll pick a word.\n");
+                        printf("Okay, I will play with you. I have a word in mind.\n");
                         word = get_word(dictionary);
 			// TODO: make a difficulty option that adjusts the number of guesses
                         guesses = strlen(word) + 3;
@@ -55,7 +57,7 @@ int main()
                         make_hangman(word, guesses);
                         break;
                 case('n'):
-                        printf("Great! I'm tired of this game anyway.\n");
+                        printf("Cool, the person choosing the word should enter it here:\n");
                         puts("");
                         printf("How many chances should the guesser get? [1-1024]: ");
                         fgets(buf, LEN, stdin);
@@ -162,6 +164,8 @@ void make_hangman(char *word, int guesses)
                 sscanf(buf, "%c", &g); 
                 g = tolower(g);
 
+                system("clear");
+
                 used[g - 'a']++;
                 for (i = 0; i < len; i++) {
                         if (g == key[i]) {
@@ -175,8 +179,10 @@ void make_hangman(char *word, int guesses)
                 if (c == len) {
                         printf("\nCongratulations! You guessed it!\n");
                         return;
+                } 
+                if (n == 0) {
+                    guesses--;
                 }
-                guesses--;
                 if (guesses) {
                         printf("\nYou guessed %c and revealed %d characters!\n", g, n);
                 } 
