@@ -96,9 +96,6 @@ abbesses
 abbey
 abbeys
 abbot
-angman
-all: $(targets)
-
 abbotcies
 abbotcy
 abbots
