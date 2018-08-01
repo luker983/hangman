@@ -26,6 +26,7 @@ int main()
         char *word;
         char *prompt = {""};
         char m;
+        int diff;
         int guesses;
         srandom(time(NULL));
         struct diction_t *dictionary = file_open();
@@ -50,8 +51,21 @@ int main()
                 case('y'):
                         printf("Okay, I will play with you. I have a word in mind.\n");
                         word = get_word(dictionary);
-			// TODO: make a difficulty option that adjusts the number of guesses
-                        guesses = strlen(word) + 3;
+
+                        printf("Pick a difficult level. 1 is the easiest, 5 is the hardest:\n");
+                        fgets(buf, LEN, stdin);
+                        sscanf(buf, "%d", &diff);
+
+                        system("clear");
+
+                        if (diff < 1 || diff > 5) {
+                            printf("\nThat's not an option, so you get the default difficulty level (3).\n");
+                            diff = 3;
+                        } else {
+                            printf("\nYou picked difficulty level %d.\n", diff);
+                        }
+                            
+                        guesses = strlen(word) + 5 - diff;
                         printf("For the word I picked, you get %d guesses.\n", guesses);
 
                         make_hangman(word, guesses);
