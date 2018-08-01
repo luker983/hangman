@@ -18,7 +18,7 @@
 #include "hangman.h"
 
 #define LEN 1024 //for character buffers
-#define DEF 5 //default number of tries if user data is out of range
+#define DEF 3 //added to string length of word if user data is out of range
 
 int main()
 {
@@ -71,15 +71,20 @@ int main()
                         make_hangman(word, guesses);
                         break;
                 case('n'):
-                        printf("Cool, the person choosing the word should enter it here:\n");
+                        printf("Cool, the person choosing the word should enter it here (leave blank to choose random word):\n");
                         puts("");
 
             			// TODO: Add option for the player choosing the word to get a random word   
                         word = getpass(prompt); 
                         word = rstrip(word);
+
+                        if (strnlen(word, LEN) == 0) {
+                            word = get_word(dictionary);
+                        }
                         system("clear");
+
                             
-                        printf("\n How many chances should the guesser get? [1-1024]: \n");
+                        printf("\n How many chances should the guesser get? The word has %d letters. [1-1024]: \n", (int) strnlen(word, LEN));
                         fgets(buf, LEN, stdin);
                         sscanf(buf, "%d", &guesses);
         
@@ -87,7 +92,8 @@ int main()
                         if (guesses > 0 && guesses < LEN) {
                                 printf("\nThe guesser will get %d tries.\n", guesses);
                         } else {
-                                printf("\nThat wasn't one of the options...so the guesser will get the default, %d tries.\n", DEF);
+                                printf("\nThat wasn't one of the options...so the guesser will get the default, %d tries.\n", (int) strnlen(word, LEN) + DEF);
+                                guesses = strnlen(word, LEN) + DEF;
                         }
                         make_hangman(word, guesses);
                         break;
@@ -190,7 +196,7 @@ void make_hangman(char *word, int guesses)
                         }
                 }
                 if (c == len) {
-                        printf("\nCongratulations! You guessed it!\n");
+                        printf("\nCongratulations! You guessed the word %s!\n", word);
                         return;
                 } 
                 if (n == 0) {
