@@ -73,8 +73,7 @@ int main()
                 case('n'):
                         printf("Cool, the person choosing the word should enter it here (leave blank to choose random word):\n");
                         puts("");
-
-            			// TODO: Add option for the player choosing the word to get a random word   
+	
                         word = getpass(prompt); 
                         word = rstrip(word);
 
