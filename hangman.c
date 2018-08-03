@@ -26,6 +26,7 @@ int main()
         char *word;
         char *prompt = {""};
         char m;
+        int i;
         int diff;
         int guesses;
         srandom(time(NULL));
@@ -46,47 +47,56 @@ int main()
 
                 puts("");
 			
-		// if playing alone, computer picks word
+		        // if playing alone, computer picks word
                 switch(m) {
                 case('y'):
+                        // computer picks word
                         printf("Okay, I will play with you. I have a word in mind.\n");
                         word = get_word(dictionary);
-
-                        printf("Pick a difficult level. 1 is the easiest, 5 is the hardest:\n");
+                        // difficulty selection
+                        printf("\nPick a difficult level. 1 is the easiest, 5 is the hardest: ");
                         fgets(buf, LEN, stdin);
                         sscanf(buf, "%d", &diff);
 
                         system("clear");
-
+                        // error checking
                         if (diff < 1 || diff > 5) {
                             printf("\nThat's not an option, so you get the default difficulty level (3).\n");
                             diff = 3;
                         } else {
                             printf("\nYou picked difficulty level %d.\n", diff);
                         }
-                            
+    
                         guesses = strlen(word) + 5 - diff;
                         printf("For the word I picked, you get %d guesses.\n", guesses);
 
                         make_hangman(word, guesses);
                         break;
+                // playing with friend
                 case('n'):
-                        printf("Cool, the person choosing the word should enter it here (leave blank to choose random word):\n");
+                        printf("Cool, the person choosing the word should enter it here (leave blank to choose random word): ");
                         puts("");
-	
+	                    // word is typed here
                         word = getpass(prompt); 
                         word = rstrip(word);
-
+                        // blank entries get random word
                         if (strnlen(word, LEN) == 0) {
                             word = get_word(dictionary);
                         }
+         
                         system("clear");
-
-                            
-                        printf("\n How many chances should the guesser get? The word has %d letters. [1-1024]: \n", (int) strnlen(word, LEN));
+                        // if a character is not a letter a random word is chosen
+                        for (i = 0; i < strnlen(word, LEN); i++) {
+                            if (!isalpha(word[i])) {
+                                printf("\nOnly letters are allowed, I will pick a random word.\n");
+                                word = get_word(dictionary);
+                            }
+                        }
+                        // gives number of guesses
+                        printf("\nHow many chances should the guesser get? The word has %d letters. [1-1024]: ", (int) strnlen(word, LEN));
                         fgets(buf, LEN, stdin);
                         sscanf(buf, "%d", &guesses);
-        
+            
                         system("clear");
                         if (guesses > 0 && guesses < LEN) {
                                 printf("\nThe guesser will get %d tries.\n", guesses);
@@ -183,7 +193,18 @@ void make_hangman(char *word, int guesses)
                 g = tolower(g);
 
                 system("clear");
-
+   
+                // verifies letter is in alphabet
+                if (!isalpha(g)) {
+                    printf("\nThat is not a letter of the alphabet.\n");
+                    continue;
+                }
+                // verifies letter has not been guessed
+                if (used[g - 'a']) {
+                    printf("\nYou have already guessed the letter %c.\n", g);
+                    continue;  
+                }
+                // marks letter as used
                 used[g - 'a']++;
                 for (i = 0; i < len; i++) {
                         if (g == key[i]) {
@@ -194,13 +215,16 @@ void make_hangman(char *word, int guesses)
                                 c++;
                         }
                 }
+                // player wins
                 if (c == len) {
                         printf("\nCongratulations! You guessed the word %s!\n", word);
                         return;
                 } 
+                // wrong guess
                 if (n == 0) {
                     guesses--;
                 }
+                // player has guesses left
                 if (guesses) {
                         printf("\nYou guessed %c and revealed %d characters!\n", g, n);
                 } 
